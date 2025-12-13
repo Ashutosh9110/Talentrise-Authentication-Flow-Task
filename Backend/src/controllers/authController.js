@@ -5,18 +5,37 @@ const generateOtp = require("../utils/generateOtp")
 const { generateToken } = require("../utils/jwt")
 
 
+const moment = require("moment")
+const User = require("../models/User")
+const Otp = require("../models/Otp")
+const generateOtp = require("../utils/generateOtp")
+const { generateToken } = require("../utils/jwt")
+const twilioClient = require("../config/twilio")
+
 exports.sendOtp = async (req, res) => {
-  const { mobile } = req.body
-  const otp = generateOtp()
-  const expiresAt = moment().add(5, "minutes").toDate()
-  await Otp.create({
-    mobile,
-    otp,
-    expiresAt,
-  })
-  // console.log("OTP sent:", otp)
-  res.json({ message: "OTP sent successfully" })
+  try {
+    const { mobile } = req.body
+    const otp = generateOtp()
+    const expiresAt = moment().add(5, "minutes").toDate()
+    await Otp.create({
+      mobile,
+      otp,
+      expiresAt,
+    })
+    await twilioClient.messages.create({
+      body: `Your OTP for login is ${otp}. It will expire in 5 minutes.`,
+      from: process.env.TWILIO_PHONE,
+      to: mobile,
+    })
+    res.json({ message: "OTP sent successfully" })
+  } catch (error) {
+    console.error("Twilio OTP error:", error) 
+    res.status(500).json({
+      message: "Failed to send OTP",
+    })
+  }
 }
+
 
 
 exports.login = async (req, res) => {
