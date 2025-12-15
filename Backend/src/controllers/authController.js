@@ -3,13 +3,6 @@ const User = require("../models/User")
 const Otp = require("../models/Otp")
 const generateOtp = require("../utils/generateOtp")
 const { generateToken } = require("../utils/jwt")
-
-
-const moment = require("moment")
-const User = require("../models/User")
-const Otp = require("../models/Otp")
-const generateOtp = require("../utils/generateOtp")
-const { generateToken } = require("../utils/jwt")
 const twilioClient = require("../config/twilio")
 
 exports.sendOtp = async (req, res) => {
