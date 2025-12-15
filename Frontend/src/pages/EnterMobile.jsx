@@ -27,7 +27,7 @@ export default function EnterMobile() {
         className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-xl text-white"
       >
         <h2 className="text-2xl font-bold mb-2 text-center">
-          Login / Register
+          Register
         </h2>
         <p className="text-gray-300 text-sm text-center mb-6">
           Enter your mobile number to receive an OTP
@@ -43,7 +43,7 @@ export default function EnterMobile() {
 
         <button
           disabled={loading}
-          className="w-full py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition disabled:opacity-60"
+          className="w-full py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition disabled:opacity-60 cursor-pointer"
         >
           {loading ? "Sending OTP..." : "Send OTP"}
         </button>

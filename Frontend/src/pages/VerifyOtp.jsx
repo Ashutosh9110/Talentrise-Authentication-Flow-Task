@@ -33,7 +33,7 @@ export default function VerifyOtp() {
         onChange={(e) => setOtp(e.target.value)}
         className="border w-full p-2 mb-4"
       />
-      <button className="bg-black text-white w-full p-2">
+      <button className="bg-black text-white w-full p-2 cursor-pointer">
         Verify OTP
       </button>
     </form>

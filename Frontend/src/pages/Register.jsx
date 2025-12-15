@@ -76,7 +76,7 @@ export default function Register() {
 
         <button
           disabled={loading}
-          className="w-full py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
         >
           {loading ? "Creating account..." : "Continue"}
         </button>

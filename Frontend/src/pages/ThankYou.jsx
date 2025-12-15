@@ -19,7 +19,7 @@ export default function ThankYou() {
 
         <button
           onClick={() => navigate("/")}
-          className="w-full py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition"
+          className="w-full py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition cursor-pointer"
         >
           Want to register another user
         </button>
