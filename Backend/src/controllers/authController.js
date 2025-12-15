@@ -83,10 +83,6 @@
       return res.status(400).json({ message: "OTP verification required" })
     }
 
-    const existingUser = await User.findOne({ mobile: formattedMobile })
-    if (existingUser) {
-      return res.status(400).json({ message: "User already registered" })
-    }
 
     const user = await User.create({
       mobile: formattedMobile,

@@ -4,15 +4,10 @@ const userSchema = new mongoose.Schema(
   {
     mobile: {
       type: String,
-      required: true,
-      unique: true,
     },
     name: String,
-    email: String,
-    role: {
+    email: {
       type: String,
-      enum: ["USER", "ADMIN"],
-      default: "USER",
     },
     isMobileVerified: {
       type: Boolean,

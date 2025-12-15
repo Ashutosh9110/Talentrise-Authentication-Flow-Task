@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { registerUser } from "../api"
 
@@ -9,6 +9,12 @@ export default function Register() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!state?.mobile) {
+      navigate("/")
+    }
+  }, [state, navigate])
 
   const submit = async (e) => {
     e.preventDefault()
@@ -24,24 +30,34 @@ export default function Register() {
       })
 
       localStorage.setItem("token", res.data.token)
-      navigate("/dashboard")
+      navigate("/complete-profile")
+    } catch (err) {
+      alert(err.response?.data?.message || "Registration failed")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center px-4">
       <form
         onSubmit={submit}
-        className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-xl text-white"
+        className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-2xl text-white border border-white/10"
       >
-        <h2 className="text-2xl font-bold mb-2 text-center">
+        <h2 className="text-3xl font-bold text-center mb-1">
           Complete Registration
         </h2>
-        <p className="text-gray-300 text-sm text-center mb-6">
-          Just one more step to get started
+
+        <p className="text-gray-400 text-sm text-center mb-6">
+          You’re almost there
         </p>
+
+        <div className="text-sm text-gray-300 mb-5 text-center">
+          Registering with
+          <span className="block font-semibold text-white mt-1">
+            {state?.mobile}
+          </span>
+        </div>
 
         <input
           placeholder="Full Name"
@@ -60,7 +76,7 @@ export default function Register() {
 
         <button
           disabled={loading}
-          className="w-full py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition disabled:opacity-60"
+          className="w-full py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {loading ? "Creating account..." : "Continue"}
         </button>

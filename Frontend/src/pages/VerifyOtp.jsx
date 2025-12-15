@@ -11,7 +11,18 @@ export default function VerifyOtp() {
   const submit = async (e) => {
     e.preventDefault()
     await verifyOtp(state.mobile, otp)
-    navigate("/register", { state })
+    navigate("/register", {
+      state: {
+        mobile: state.mobile.startsWith("+")
+          ? state.mobile
+          : `+91${state.mobile}`,
+      },
+    })
+    if (!state?.mobile) {
+      navigate("/")
+      return null
+    }
+    
   }
 
   return (

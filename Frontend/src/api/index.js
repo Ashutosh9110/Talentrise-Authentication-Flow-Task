@@ -16,6 +16,6 @@ export const verifyOtp = (mobile, otp) => {
   return API.post("/auth/verify-otp", { mobile, otp })
 }
 
-export const registerUser = (payload) => {
-  return API.post("/auth/register", payload)
+export const registerUser = (data) => {
+  return API.post("/auth/complete-profile", data)
 }
