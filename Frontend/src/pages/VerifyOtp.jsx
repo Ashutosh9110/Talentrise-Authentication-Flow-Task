@@ -7,16 +7,11 @@ export default function VerifyOtp() {
   const { state } = useLocation()
   const navigate = useNavigate()
 
+  
   const submit = async (e) => {
     e.preventDefault()
-    const res = await verifyOtp(state.mobile, otp)
-
-    if (res.data.needsRegistration) {
-      navigate("/register", { state })
-    } else {
-      localStorage.setItem("token", res.data.token)
-      navigate("/dashboard")
-    }
+    await verifyOtp(state.mobile, otp)
+    navigate("/register", { state })
   }
 
   return (

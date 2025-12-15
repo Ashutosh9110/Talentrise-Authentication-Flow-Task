@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { sendOtp } from "../api"
 import { useNavigate } from "react-router-dom"
+import { sendOtp } from "../api/index"
 
 export default function EnterMobile() {
   const [mobile, setMobile] = useState("")
