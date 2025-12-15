@@ -11,7 +11,7 @@ exports.sendOtp = async (req, res) => {
     const otp = generateOtp()
     const expiresAt = moment().add(5, "minutes").toDate()
     await Otp.create({
-      mobile,
+      mobile, 
       otp,
       expiresAt,
     })

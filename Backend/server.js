@@ -1,20 +1,18 @@
 require("dotenv").config()
 const express = require("express")
-const userRoutes = require("./src/routes/authRoutes")
-const { default: mongoose } = require("mongoose")
-const { CallPage } = require("twilio/lib/rest/api/v2010/account/call")
-const PORT = 5000
-
+const authRoutes = require("./routes/auth.routes")
 
 const app = express()
 
-app.use(express.json)
-app.use("/users", userRoutes)
+app.use(express.json())
+app.use("/auth", authRoutes)
 
+const app = require("./app")
+const connectDB = require("./src/config/db")
 
-mongoose.connect("mongodb://127.0.0.1:27017/dummy")
-  .then(() => {
-    console.log("MongoDB connected")
-    app.listen(PORT, () => "Server running at PORT: 5000")
-  })
-  .catch((err) => console.log("Unable to connect. Reason: ", err))
+connectDB()
+
+const PORT = process.env.PORT || 5000
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
