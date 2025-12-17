@@ -37,66 +37,89 @@
   }
 
 
-
-
-
   exports.verifyOtp = async (req, res) => {
-
-    let { mobile, otp } = req.body
-
-    const formattedMobile = mobile.startsWith("+")
-    ? mobile
-    : `+91${mobile}`
-
-    const otpRecord = await Otp.findOne({
-      mobile: formattedMobile ,
-      otp,
-      verified: false,
-    })
-    if (!otpRecord) {
-      return res.status(400).json({ message: "Invalid OTP" })
+    try {
+      let { mobile, otp } = req.body
+      const formattedMobile = mobile.startsWith("+")
+        ? mobile
+        : `+91${mobile}`
+      const otpRecord = await Otp.findOne({
+        mobile: formattedMobile,
+        otp,
+        verified: false,
+      })
+      if (!otpRecord) {
+        return res.status(400).json({
+          message: "OTP is incorrect",
+        })
+      }
+      if (moment().isAfter(otpRecord.expiresAt)) {
+        return res.status(400).json({
+          message: "OTP expired",
+        })
+      }
+      otpRecord.verified = true
+      await otpRecord.save()
+        let user = await User.findOne({ mobile: formattedMobile })
+        if (!user) {
+        await User.create({
+          mobile: formattedMobile,
+          isMobileVerified: true,
+        })
+        return res.json({
+          message: "Welcome to Zomato, please provide your name and email",
+          isNewUser: true,
+        })
+      }
+        return res.json({
+        message: "Welcome back to Zomato",
+        isNewUser: false,
+      })
+    } catch (error) {
+      console.error("Verify OTP error:", error)
+      res.status(500).json({ message: "Something went wrong" })
     }
-    if (moment().isAfter(otpRecord.expiresAt)) {
-      return res.status(400).json({ message: "OTP expired" })
-    }
-    otpRecord.verified = true
-    await otpRecord.save()  
-    res.json({
-      message: "OTP verified successfully",
-    })
   }
+  
 
 
   exports.completeProfile = async (req, res) => {
-    let { mobile, name, email } = req.body
-
-    const formattedMobile = mobile.startsWith("+")
-      ? mobile
-      : `+91${mobile}`
-
-    const otpRecord = await Otp.findOne({
-      mobile: formattedMobile,
-      verified: true,
-    })
-
-    if (!otpRecord) {
-      return res.status(400).json({ message: "OTP verification required" })
+    try {
+      let { mobile, name, email } = req.body
+      const formattedMobile = mobile.startsWith("+")
+        ? mobile
+        : `+91${mobile}`
+      const otpRecord = await Otp.findOne({
+        mobile: formattedMobile,
+        verified: true,
+      })
+      if (!otpRecord) {
+        return res.status(400).json({
+          message: "OTP verification required",
+        })
+      }
+        let user = await User.findOne({ mobile: formattedMobile })
+      if (user) {
+        return res.status(400).json({
+          message: "User already exists",
+        })
+      }
+      user = await User.create({
+        mobile: formattedMobile,
+        name,
+        email,
+        isMobileVerified: true,
+      })
+      const token = generateToken(user)
+      res.status(201).json({
+        message: "Registration completed",
+        token,
+        user,
+      })
+    } catch (error) {
+      console.error("Complete profile error:", error)
+      res.status(500).json({ message: "Something went wrong" })
     }
-
-
-    const user = await User.create({
-      mobile: formattedMobile,
-      name,
-      email,
-      isMobileVerified: true,
-    })
-
-    const token = generateToken(user)
-
-    res.status(201).json({
-      message: "Registration completed",
-      token,
-      user,
-    })
   }
+  
 
